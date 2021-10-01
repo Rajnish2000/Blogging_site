@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %} Home page{% endblock title %}
+{% block index %}active{% endblock index %}
+{% load static %}
+ {% block css %}
+ .position-relative{
+     height:100%;
+     background:url({% static 'images/first.png' %});
+     background-color: mediumspringgreen;
+    color: crimson;
+    background-repeat: no-repeat;
+    justify-content:center;
+    
+ }
+.m-md-3 {
+    margin: 0rem!important;
+}
+ 
+ {% endblock css %}
+
+
+
+{% block body %}
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-grey">
+      <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-bold">MyCoder Blog</h1>
+        <p class="lead font-weight-bold">And an even wittier subheading to boot. Jumpstart your marketing efforts with this example based on Apple's marketing pages.</p>
+        <a class="btn btn-outline-secondary" href="blog/">Go To Blog</a>
+      </div>
+      <div class="product-device box-shadow d-none d-md-block"></div>
+      <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+    </div>
+
+    
+<div class="container">
+  <h2 class="my-3">MyCoder Popular Blog : </h2><hr class='p-0 bg-dark'>
+  {% for post in posts %}
+    <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+              <strong class="d-inline-block mb-2 text-primary">{{post.author}}</strong>
+              <h3 class="mb-0">
+                <a class="text-dark" role="text">{{post.title}}</a>
+              </h3>
+              <div class="mb-1 text-muted">{{post.timestamp}}</div>
+              <p class="card-text mb-auto">{{post.content | slice:"0:272"}} ....</p>
+              <a href="/blog/{{post.slug}}" class="my-2">Continue reading</a>
+            </div>
+            
+          </div>
+          {% endfor %}
+</div>
+
+{% endblock body %}

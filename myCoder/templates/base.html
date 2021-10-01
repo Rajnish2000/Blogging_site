@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>{% block title %}{% endblock title %}</title>
+
+  <style>
+    {% block css %}
+
+      {% endblock css %}
+
+    .navbar {
+      background-color: #a118ff !important;
+      min-height: 60px;
+      box-shadow: 0px -1px 4px #565a65;
+    }
+
+    .footer {
+      position: relative;
+      bottom: 0px;
+      width: 100%;
+      box-shadow: 0px 5px 8px 9px #565a65;
+      margin-top: 10rem;
+
+
+    }
+
+    .container-fluid {
+      margin-top: 4.2rem;
+      margin-left: 0px;
+      margin-right: 0px;
+      padding: 0px;
+    }
+
+    form {
+      margin-left: 0px;
+    }
+
+    .fa {
+      float: right;
+      display: flex;
+      position: absolute;
+      bottom: 115px;
+      right: 30px;
+    }
+
+    a:not([href]):not([tabindex]) {
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+    <a class="navbar-brand h2" href="#">MyCoder</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item pr-4 {% block index %}{% endblock index %}">
+          <a class="nav-link h5" href="/">Home </a>
+        </li>
+        <li class="nav-item pr-4 {% block about %}{% endblock about %}">
+          <a class="nav-link h5" href="/about">About</a>
+        </li>
+        <li class="nav-item pr-4 {% block blog %}{% endblock blog %}">
+          <a class="nav-link h5" href="/blog">blog</a>
+        </li>
+        <li class="nav-item pr-4 {% block contact %}{% endblock contact %}">
+          <a class="nav-link h5" href="/contact">Contact</a>
+        </li>
+
+      </ul>
+      <form action='/search' class="form-inline my-2 my-lg-0 mr-3">
+        <input class="form-control mr-sm-2 pr-5" type="search" name='query' id='search' placeholder="Search"
+          aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      {% comment %} modal button login and sign {% endcomment %}
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav mr-3">
+        <div class="btn-group">
+          <button type="button" class="btn btn-warning dropdown-toggle rounded-circle py-2" data-toggle="dropdown" data-display="static"
+            aria-haspopup="true" aria-expanded="false">
+             {{request.user}}
+          </button>
+          <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left"><hr class='my-0'>
+            <a role="button" href="#" class="dropdown-item" type="button">Create New Blog</a><hr class='my-0 mt-0'>
+            <a role="button" href="/profile" class="dropdown-item" type="button">Profile</a>
+            <a role="button" href="/logout" class="dropdown-item" type="button">logout</a>
+           <hr class='my-0 mt-0'>
+          </div>
+        </div>  
+      </ul>
+      {% else %}
+      <a role="button" class="btn border mr-sm-2" data-toggle="modal" data-target="#logIn">
+        LogIn
+      </a>
+      <a role="button" class="btn border ml-2 mr-sm-2" data-toggle="modal" data-target="#signUp">
+        SignUp
+      </a>
+      {% endif %}
+
+    </div>
+  </nav>
+  <!-- Button trigger modal -->
+
+  <!--Log In Modal -->
+  <div class="modal fade right" id="logIn" tabindex="-1" role="dialog" aria-labelledby="LogModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="LogModalTitle">LogIn Form</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/login/" method='post'>
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="LogInusername">UserName</label>
+              <input type="text" class="form-control" id="LogInusername" name='logUsername'
+                aria-describedby="LogInusernameHelp" placeholder="UserName must be Unique">
+            </div>
+            <div class="form-group">
+              <label for="PasswordL">Password</label>
+              <input type="password" class="form-control" id="PasswordL" name='logPassword' placeholder="Password">
+              <span toggle="#passwordL" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">LogIn</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Sign Up Modal -->
+  <div class="modal fade right" id="signUp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">SignUp Form</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action='/signUp/' method='post'>
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="userName">userName </label>
+              <input type="text" class="form-control" id="userName" name="username" aria-describedby="userNameHelp"
+                placeholder=" userName">
+            </div>
+            <div class="form-group">
+              <label for="fName">First Name </label>
+              <input type="text" class="form-control" id="fName" name="fname" aria-describedby="NameHelp"
+                placeholder="Enter Name">
+            </div>
+            <div class="form-group">
+              <label for="lName">Last Name </label>
+              <input type="text" class="form-control" id="lName" name="lname" aria-describedby="NameHelp"
+                placeholder="Enter Name">
+            </div>
+            <div class="form-group">
+              <label for="Email">Email address</label>
+              <input type="email" class="form-control" id="Email" name="email" aria-describedby="emailHelp"
+                placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label for="RPassword">Password</label>
+              <input type="password" class="form-control" id="RPassword" name="password1" placeholder="Password">
+              <span toggle="#RPassword" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+            </div>
+            <div class="form-group">
+              <label for="Password2">confirm Password</label>
+              <input type="password" class="form-control" id="Password2" name="password2"
+                placeholder="confirm Password">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">SignUp</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade mb-0 show" role="alert">
+      <strong>Message !</strong> {{message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% block body %}
+    {% endblock body %}
+  </div>
+
+
+  <footer class='footer mb-0'>
+    <nav class="navbar navbar-dark">
+      <a class="navbar-brand h4" href="#">MyCoder</a>
+      <span class="text-center mt-5">
+        <p class="text text-light text-center m-0">&copy; Company 2020-2021</p>
+        <p class="text text-light text-center m-0"> All &copy; copyright are reserved </p>
+      </span>
+      <span class="navbar-text mr-5">
+        <ul class="nav flex-column mr-5">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Our services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Learn More.</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Join Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Ask Q/A</a>
+          </li>
+        </ul>
+      </span>
+    </nav>
+  </footer>
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</body>
+<script>
+  {% comment %} $('#eye-log').on('click', function clicked() {
+    console.log('eye button is clicked');
+    var pass = document.getElementById('PasswordL').value;
+    var icon = document.getElementById('eye-log').value;
+    console.log(pass);
+    if (pass.type == 'password') {
+      icon.classList = 'fa fa-eye-slash';
+      pass.type = 'text';
+    }
+    else {
+
+    }
+  }) {% endcomment %}
+
+  $(".toggle-password").click(function () {
+
+    $(this).toggleClass("fa-eye fa-eye-slash");
+    var input = $($(this).attr("toggle"));
+    if (input.attr("type") == "password") {
+      input.attr("type", "text");
+    } else {
+      input.attr("type", "password");
+    }
+  });
+</script>
+
+</html>

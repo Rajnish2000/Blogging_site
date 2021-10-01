@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %} blog-post{% endblock title %}
+{% block blogpost %}active{% endblock blogpost %}
+{% block css %}
+
+.container{
+margin-top:5rem;
+margin-bottom:0px;
+}
+
+#comment-form{
+border: 1px solid darkkhaki;
+border-style: dashed;
+padding: inherit;
+}
+
+.fa-user {
+position: absolute;
+bottom: 12px;
+top:10px;
+color: darkorchid;
+font-size: 3rem;
+border: 2px solid darkturquoise;
+border-style: inset;
+border-radius: 4rem;
+margin-left: -2px;
+height: fit-content;
+padding: 12px;
+}
+#user{
+color:blue;
+font-weight:bold;
+}
+.col-md-11{
+box-shadow:2px 2px 10px #6f6f6f;
+}
+{% endblock css %}
+
+
+{% block body %}
+{% load humanize %}
+<div class="container">
+    <div class="blog-post">
+        <h2 class="blog-post-title">{{post.title}}</h2>
+        <p class="blog-post-meta">{{post.timestamp}} by <a href="#">{{post.author}}</a></p>
+
+        <p>{{post.content | truncatechars:'700'}}</p>
+        <p>{{post.content | slice:'606:'}}</p>
+        <hr>
+        {% comment %} <h2>Heading 1</h2>
+
+        <h3>heading 2</h3>
+
+        <h3>heading 3</h3>
+        <p></p>
+        {% endcomment %}
+    </div>
+</div>
+<div class="container mt-2">
+    <h2 class="brand">Comments ({{comments.count}}) :</h2>
+    <hr class='py-0 bg-dark'>
+    {% if user.is_authenticated %}
+    <form id='comment-form' action='/blog/postcomment' method='post'>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="comment1">post comment</label>
+            <input type="text" class="form-control form-control-lg" id="comment1" name='comment'
+                aria-describedby="commentHelp" placeholder="comment">
+        </div>
+        <input type="hidden" name='postSno' value="{{post.sno}}">
+        <input type="hidden" name="parentSno" value="">
+        <button type="submit" class="btn btn-primary mx-3 mb-3 px-4">POST</button>
+    </form>
+    {% else %}
+    please LogIn TO comment
+    {% endif %}
+
+    {% for comment in comments %}
+    <div class="row mt-3 mx-5">
+        <div class="col-md-1">
+            <i class="fa fa-user mb-0" aria-hidden="true"></i>
+        </div>
+        <div class="col-md-11 bg-light">
+            <h6 id="user" class='mb-1'>{{comment.user.username}}</h6>
+            <span> ({{comment.timestamp | naturaltime}})</span>
+            <h6 class="comment my-3 mx-1">{{comment.comment}}</h6>
+            <!-- <h6 class="comment my-3 mx-4">{{comment.parent}}</h6> -->
+            <hr>
+            <div class="col-sm-12 reply">
+                <a class="btn btn-primary btn-sm mb-1" data-toggle="collapse" href="#reply{{comment.sno}}" role="button"
+                    aria-expanded="false" aria-controls="reply{{comment.sno}}">
+                    Reply
+                </a>
+                <div class="collapse" id="reply{{comment.sno}}">
+                    <div class="card-body">
+                        <form id='reply_comment-form' action='/blog/postcomment' method='post'>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="comment1">post Reply</label>
+                                <input type="text" class="form-control" id="comment1" name='comment'
+                                    aria-describedby="commentHelp" placeholder="comment">
+                                    <input type="hidden" name="parentSno" value="{{comment.sno}}">
+                            </div>
+                            <input type="hidden" name='postSno' value="{{post.sno}}">
+                            <button type="submit" class="btn btn-primary mx-3 mb-0 px-2">POST</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock body %}

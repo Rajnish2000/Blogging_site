@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}contact page{% endblock title %}
+{% block contact %}active{% endblock contact %}
+{% block css %}
+form{
+     max-width:80%;
+     margin-left:46rem;
+}
+textarea{
+    min-height:130px;
+}
+
+
+
+
+{% endblock css %}
+
+{% block body %}
+
+ <h1 class="jumbotron text-center">Contact</h1>
+<div class="container">
+   
+    <form action="/contact/" method="post" class='ml-5'>
+         {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name </label>
+            <input type="name" class="form-control" id="name" name='name' aria-describedby="nameHelp" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name='email' aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" class="form-control" id="phone" name='phone' aria-describedby="emailHelp" placeholder="Enter phone">
+        </div>
+        <div class="form-group">
+            <label for="message">Message...</label>
+            <textarea class="form-control" id="message" name='message' placeholder="Enter YOur Query !"></textarea>
+        </div>
+        <div class="text-center">
+        <button type="submit" class="btn btn-primary pl-5 pr-5">Submit</button>
+        </div>
+        </form>
+  
+</div>
+
+{% endblock body %}
